@@ -1,0 +1,93 @@
+export declare const WATags: {
+    LIST_EMPTY: number;
+    STREAM_END: number;
+    DICTIONARY_0: number;
+    DICTIONARY_1: number;
+    DICTIONARY_2: number;
+    DICTIONARY_3: number;
+    LIST_8: number;
+    LIST_16: number;
+    JID_PAIR: number;
+    HEX_8: number;
+    BINARY_8: number;
+    BINARY_20: number;
+    BINARY_32: number;
+    NIBBLE_8: number;
+    SINGLE_BYTE_MAX: number;
+    PACKED_MAX: number;
+};
+export declare const WAMetrics: {
+    DEBUG_LOG: number;
+    QUERY_RESUME: number;
+    QUERY_RECEIPT: number;
+    QUERY_MEDIA: number;
+    QUERY_CHAT: number;
+    QUERY_CONTACTS: number;
+    QUERY_MESSAGES: number;
+    PRESENCE: number;
+    PRESENCE_SUBSCRIBE: number;
+    GROUP: number;
+    READ: number;
+    CHAT: number;
+    RECEIVED: number;
+    PIC: number;
+    STATUS: number;
+    MESSAGE: number;
+    QUERY_ACTIONS: number;
+    BLOCK: number;
+    QUERY_GROUP: number;
+    QUERY_PREVIEW: number;
+    QUERY_EMOJI: number;
+    QUERY_MESSAGE_INFO: number;
+    SPAM: number;
+    QUERY_SEARCH: number;
+    QUERY_IDENTITY: number;
+    QUERY_URL: number;
+    PROFILE: number;
+    CONTACT: number;
+    QUERY_VCARD: number;
+    QUERY_STATUS: number;
+    QUERY_STATUS_UPDATE: number;
+    PRIVACY_STATUS: number;
+    QUERY_LIVE_LOCATIONS: number;
+    LIVE_LOCATION: number;
+    QUERY_VNAME: number;
+    QUERY_LABELS: number;
+    CALL: number;
+    QUERY_CALL: number;
+    QUERY_QUICK_REPLIES: number;
+    QUERY_CALL_OFFER: number;
+    QUERY_RESPONSE: number;
+    QUERY_STICKER_PACKS: number;
+    QUERY_STICKERS: number;
+    ADD_OR_REMOVE_LABELS: number;
+    QUERY_NEXT_LABEL_COLOR: number;
+    QUERY_LABEL_PALETTE: number;
+    CREATE_OR_DELETE_LABELS: number;
+    EDIT_LABELS: number;
+};
+export declare const WAFlags: {
+    IGNORE: number;
+    ACK_REQUEST: number;
+    AVAILABLE: number;
+    NOT_AVAILABLE: number;
+    EXPIRES: number;
+    SKIP_OFFLINE: number;
+};
+export declare const WAMediaAppInfo: {
+    image: string;
+    sticker: string;
+    video: string;
+    audio: string;
+    document: string;
+};
+export declare const WASingleByteTokens: string[];
+export declare const WADoubleByteTokens: never[];
+export declare class WAWebMessageInfo {
+    static decode(data: Uint8Array): Promise<{
+        [k: string]: any;
+    }>;
+    static encode(msg: {
+        [k: string]: any;
+    }): Promise<Uint8Array>;
+}
