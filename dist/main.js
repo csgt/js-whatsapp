@@ -95,12 +95,14 @@ var WhatsApp = /** @class */ (function () {
             clientShortName: "WhatsAppForwarder",
             restoreSession: false
         }, parameters);
+        console.log("contruct", this.parameters);
         this.parameters.qrPath = path_1.resolve(".", this.parameters.qrPath);
         if (this.parameters.restoreSession) {
             this.parameters.keysPath = path_1.resolve(".", this.parameters.keysPath);
         }
         this.apiSocket.onopen = this.init(loginMsgId, this.parameters.restoreSession);
         this.loginMsgId = loginMsgId;
+        console.log('back in constructor');
         if (this.parameters.restoreSession) {
             path_2.doesFileExist(this.parameters.keysPath).then(function (doesExist) {
                 if (!doesExist) {
@@ -109,6 +111,7 @@ var WhatsApp = /** @class */ (function () {
             });
         }
         else {
+            console.log('onMessage in constructor');
             this.apiSocket.onmessage = this.onMessage(loginMsgId);
         }
     }
@@ -149,6 +152,7 @@ var WhatsApp = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
+                console.log("getKeys");
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         fs_1.readFile(_this.parameters.keysPath, "utf-8", function (err, data) {
                             if (err)
@@ -169,6 +173,7 @@ var WhatsApp = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
+                console.log("restoreSession", loginMsgId);
                 this.apiSocket.send(loginMsgId + ",[\"admin\",\"login\",\"" + this.clientToken + "\",\"" + this.serverToken + "\",\"" + this.clientId + "\",\"takeover\"]");
                 this.apiSocket.onmessage = function (e) {
                     if (typeof e.data === "string") {
@@ -189,12 +194,14 @@ var WhatsApp = /** @class */ (function () {
         });
     };
     WhatsApp.prototype.keepAlive = function () {
+        console.log("keepalive");
         if (this.apiSocket) {
             this.apiSocket.send("?,,");
             setTimeout(this.keepAlive.bind(this), 20 * 1000);
         }
     };
     WhatsApp.prototype.disconnect = function () {
+        console.log("disconnect");
         this.apiSocket.send("goodbye,,[\"admin\",\"Conn\",\"disconnect\"]");
     };
     WhatsApp.prototype.sendSocketAsync = function (messageTag, data) {
@@ -1107,6 +1114,7 @@ var WhatsApp = /** @class */ (function () {
         });
     };
     WhatsApp.prototype.setupEncryptionKeys = function (data) {
+        console.log("setting up encryption keys");
         var decodedSecret = Uint8Array.from(Buffer.from(data[1].secret, "base64"));
         var publicKey = decodedSecret.slice(0, 32);
         var sharedSecret = curve25519_js_1.sharedKey(this.keyPair.private, publicKey);
@@ -1128,6 +1136,7 @@ var WhatsApp = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
+                        console.log("setting up qr code");
                         this.keyPair = curve25519_js_1.generateKeyPair(Uint8Array.from(crypto_1.default.randomBytes(32)));
                         publicKeyBase64 = Buffer.from(this.keyPair.public).toString("base64");
                         _a = encryption_1.dataUrlToBuffer;
@@ -1146,6 +1155,7 @@ var WhatsApp = /** @class */ (function () {
     };
     WhatsApp.prototype.init = function (loginMsgId, restoreSession) {
         var _this = this;
+        console.log("init", loginMsgId, restoreSession);
         return function (e) { return __awaiter(_this, void 0, void 0, function () {
             var _a, _b, _c;
             return __generator(this, function (_d) {
@@ -1164,14 +1174,19 @@ var WhatsApp = /** @class */ (function () {
                         _d.label = 3;
                     case 3:
                         if (!_a) return [3 /*break*/, 4];
+                        console.log("creating new clientId");
                         this.clientId = crypto_1.default.randomBytes(16).toString("base64");
                         return [3 /*break*/, 6];
-                    case 4: return [4 /*yield*/, this.getKeys()];
+                    case 4:
+                        console.log("getting keys");
+                        return [4 /*yield*/, this.getKeys()];
                     case 5:
                         _d.sent();
                         _d.label = 6;
                     case 6:
-                        e.target.send(loginMsgId + ",[\"admin\",\"init\",[0,4,2080],[\"" + this.parameters.clientName + "\",\"" + this.parameters.clientShortName + "\"],\"" + this.clientId + "\",true]");
+                        console.log('before admin init ', loginMsgId);
+                        e.target.send(loginMsgId + ",[\"admin\",\"init\",[0,4,2080],[\"" + this.parameters.clientName + "\",\"" + this.parameters.clientShortName + "\",\"0.1.0\"],\"" + this.clientId + "\",true]");
+                        console.log('after admin init');
                         _c = restoreSession;
                         if (!_c) return [3 /*break*/, 8];
                         return [4 /*yield*/, path_2.doesFileExist(this.parameters.keysPath)];
@@ -1180,6 +1195,7 @@ var WhatsApp = /** @class */ (function () {
                         _d.label = 8;
                     case 8:
                         if (_c) {
+                            console.log("restoring session");
                             this.restoreSession(loginMsgId);
                         }
                         return [2 /*return*/];

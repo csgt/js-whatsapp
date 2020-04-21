@@ -520,6 +520,8 @@ export default class WhatsApp {
       restoreSession : false
     }, ...parameters}
 
+    console.log("contruct", this.parameters)
+
     this.parameters.qrPath = resolvePath(".", this.parameters.qrPath);
 
     if (this.parameters.restoreSession) {
@@ -528,6 +530,7 @@ export default class WhatsApp {
 
     this.apiSocket.onopen = this.init(loginMsgId, this.parameters.restoreSession);
     this.loginMsgId = loginMsgId;
+    console.log('back in constructor')
 
     if (this.parameters.restoreSession) {
       doesFileExist(this.parameters.keysPath!).then(doesExist => {
@@ -536,6 +539,7 @@ export default class WhatsApp {
         }
       });
     } else {
+      console.log('onMessage in constructor')
       this.apiSocket.onmessage = this.onMessage(loginMsgId);
     }
   }
@@ -598,6 +602,7 @@ export default class WhatsApp {
   }
 
   private async getKeys() {
+    console.log("getKeys")
     return new Promise((resolve, reject) => {
       readFile(this.parameters.keysPath!, "utf-8", (err, data) => {
         if (err) reject(err);
@@ -622,6 +627,7 @@ export default class WhatsApp {
   }
 
   private async restoreSession(loginMsgId: string) {
+    console.log("restoreSession", loginMsgId)
     this.apiSocket.send(
       `${loginMsgId},["admin","login","${this.clientToken}","${this.serverToken}","${this.clientId}","takeover"]`
     );
@@ -646,6 +652,7 @@ export default class WhatsApp {
   }
 
   private keepAlive() {
+    console.log("keepalive")
     if (this.apiSocket) {
       this.apiSocket.send("?,,");
       setTimeout(this.keepAlive.bind(this), 20 * 1000);
@@ -653,6 +660,7 @@ export default class WhatsApp {
   }
 
   public disconnect() {
+    console.log("disconnect")
     this.apiSocket.send(`goodbye,,["admin","Conn","disconnect"]`);
   }
 
@@ -1560,6 +1568,7 @@ export default class WhatsApp {
   }
 
   private setupEncryptionKeys(data: WhatsAppConnPayload) {
+    console.log("setting up encryption keys")
     const decodedSecret = Uint8Array.from(
       Buffer.from(data[1].secret, "base64")
     );
@@ -1591,6 +1600,7 @@ export default class WhatsApp {
   }
 
   private async setupQrCode(data: WhatsAppLoginPayload) {
+    console.log("setting up qr code")
     this.keyPair = generateKeyPair(Uint8Array.from(crypto.randomBytes(32)));
     const publicKeyBase64 = Buffer.from(this.keyPair.public).toString("base64");
     const qrCode = dataUrlToBuffer(
@@ -1604,21 +1614,27 @@ export default class WhatsApp {
   }
 
   private init(loginMsgId: string, restoreSession: boolean) {
+    console.log("init", loginMsgId, restoreSession)
     return async (e: WebSocket.OpenEvent) => {
       if (
         !restoreSession ||
         (restoreSession && !(await doesFileExist(this.parameters.keysPath!)))
       ) {
+        console.log("creating new clientId")
         this.clientId = crypto.randomBytes(16).toString("base64");
       } else {
+        console.log("getting keys")
         await this.getKeys();
       }
 
+      console.log('before admin init ', loginMsgId)
       e.target.send(
-        `${loginMsgId},["admin","init",[0,4,2080],["${this.parameters.clientName}","${this.parameters.clientShortName}"],"${this.clientId}",true]`
+        `${loginMsgId},["admin","init",[0,4,2080],["${this.parameters.clientName}","${this.parameters.clientShortName}","0.1.0"],"${this.clientId}",true]`
       );
+      console.log('after admin init')
 
       if (restoreSession && (await doesFileExist(this.parameters.keysPath!))) {
+        console.log("restoring session")
         this.restoreSession(loginMsgId);
       }
     };
