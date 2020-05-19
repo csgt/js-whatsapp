@@ -126,6 +126,7 @@ export interface WAMedia {
     gifPlayback?: boolean;
     seconds?: number;
     caption?: string;
+    fileName?: string;
 }
 export interface WAReceiveMedia {
     directPath: string;
@@ -349,7 +350,7 @@ export default class WhatsApp {
     private uploadMedia;
     private queryMediaConn;
     private encryptMedia;
-    sendMediaMessage(file: Buffer, mimetype: string, msgType: "image" | "sticker" | "video" | "audio" | "document", remoteJid: string, caption?: string | undefined, duration?: number | undefined, isGif?: boolean, mentionedJid?: WAContextInfo["mentionedJid"]): Promise<{
+    sendMediaMessage(file: Buffer, mimetype: string, msgType: "image" | "sticker" | "video" | "audio" | "document", remoteJid: string, caption?: string | undefined, duration?: number | undefined, isGif?: boolean, fileName?: string | undefined, mentionedJid?: WAContextInfo["mentionedJid"]): Promise<{
         id: string;
         content: WAMessage;
     }>;

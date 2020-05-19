@@ -844,10 +844,11 @@ var WhatsApp = /** @class */ (function () {
             });
         });
     };
-    WhatsApp.prototype.encryptMedia = function (file, mimetype, msgType, caption, duration, isGif) {
+    WhatsApp.prototype.encryptMedia = function (file, mimetype, msgType, caption, duration, isGif, fileName) {
         if (caption === void 0) { caption = undefined; }
         if (duration === void 0) { duration = undefined; }
         if (isGif === void 0) { isGif = false; }
+        if (fileName === void 0) { fileName = undefined; }
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -880,7 +881,8 @@ var WhatsApp = /** @class */ (function () {
                                         url: "",
                                         fileSha256: fileSha256,
                                         fileEncSha256: fileEncSha256,
-                                        fileLength: file.byteLength
+                                        fileLength: file.byteLength,
+                                        fileName: fileName
                                     };
                                     if (!(msgType === "sticker")) return [3 /*break*/, 3];
                                     _b = mediaObj;
@@ -926,17 +928,18 @@ var WhatsApp = /** @class */ (function () {
             });
         });
     };
-    WhatsApp.prototype.sendMediaMessage = function (file, mimetype, msgType, remoteJid, caption, duration, isGif, mentionedJid) {
+    WhatsApp.prototype.sendMediaMessage = function (file, mimetype, msgType, remoteJid, caption, duration, isGif, fileName, mentionedJid) {
         if (caption === void 0) { caption = undefined; }
         if (duration === void 0) { duration = undefined; }
         if (isGif === void 0) { isGif = false; }
+        if (fileName === void 0) { fileName = undefined; }
         return __awaiter(this, void 0, void 0, function () {
             var nextId, mediaProto, media;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         nextId = encryption_1.randHex(12).toUpperCase();
-                        return [4 /*yield*/, this.encryptMedia(file, mimetype, msgType, caption, duration, isGif)];
+                        return [4 /*yield*/, this.encryptMedia(file, mimetype, msgType, caption, duration, isGif, fileName)];
                     case 1:
                         mediaProto = _a.sent();
                         return [4 /*yield*/, this.sendMediaProto(mediaProto[(msgType + "Message")], msgType, remoteJid, nextId, mentionedJid)];

@@ -169,6 +169,7 @@ export interface WAMedia {
   gifPlayback?: boolean;
   seconds?: number;
   caption?: string;
+  fileName?: string;
 }
 
 export interface WAReceiveMedia {
@@ -1324,7 +1325,8 @@ export default class WhatsApp {
     msgType: "image" | "sticker" | "video" | "audio" | "document",
     caption: string | undefined = undefined,
     duration: number | undefined = undefined,
-    isGif: boolean = false
+    isGif: boolean = false,
+    fileName: string | undefined = undefined,
   ): Promise<WAMessage> {
     return new Promise(async resolve => {
       const messageTag = randHex(12).toUpperCase();
@@ -1349,7 +1351,8 @@ export default class WhatsApp {
         url: "",
         fileSha256,
         fileEncSha256,
-        fileLength: file.byteLength
+        fileLength: file.byteLength,
+        fileName: fileName
       };
 
       if (msgType === "sticker") {
@@ -1391,7 +1394,8 @@ export default class WhatsApp {
     caption: string | undefined = undefined,
     duration: number | undefined = undefined,
     isGif: boolean = false,
-    mentionedJid?: WAContextInfo["mentionedJid"]
+    fileName: string | undefined = undefined,
+    mentionedJid?: WAContextInfo["mentionedJid"],
   ): Promise<{ id: string; content: WAMessage }> {
     const nextId = randHex(12).toUpperCase();
     const mediaProto = await this.encryptMedia(
@@ -1400,7 +1404,8 @@ export default class WhatsApp {
       msgType,
       caption,
       duration,
-      isGif
+      isGif,
+      fileName
     );
     const media = await this.sendMediaProto(
       (mediaProto[
