@@ -920,9 +920,14 @@ var WhatsApp = /** @class */ (function () {
                                         mediaObj.gifPlayback = isGif;
                                     }
                                     _e.label = 6;
-                                case 6: return [4 /*yield*/, this.uploadMedia("https://" + hostname + "/" + path + "/" + token + "?auth=" + auth + "&token=" + token, arrays_1.concatIntArray(enc, mac))];
+                                case 6:
+                                    console.log('encryptMedia');
+                                    console.log(enc);
+                                    console.log(mac);
+                                    return [4 /*yield*/, this.uploadMedia("https://" + hostname + "/" + path + "/" + token + "?auth=" + auth + "&token=" + token, arrays_1.concatIntArray(enc, mac))];
                                 case 7:
                                     media = _e.sent();
+                                    console.log(media);
                                     mediaObj.url = media.url;
                                     resolve((_d = {}, _d[msgType + "Message"] = mediaObj, _d));
                                     return [2 /*return*/];

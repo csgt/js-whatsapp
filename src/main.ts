@@ -1377,11 +1377,15 @@ export default class WhatsApp {
       } else if (msgType === "video") {
         mediaObj.gifPlayback = isGif;
       }
+      console.log('encryptMedia')
+      console.log(enc)
+      console.log(mac)
 
       const media = await this.uploadMedia(
         `https://${hostname}/${path}/${token}?auth=${auth}&token=${token}`,
         concatIntArray(enc, mac)
       );
+      console.log(media)
 
       mediaObj.url = media.url;
 
