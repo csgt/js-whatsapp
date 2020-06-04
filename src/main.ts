@@ -978,6 +978,8 @@ export default class WhatsApp {
     remoteJid: string,
     msgId?: string
   ) {
+    console.log('sendMessage init')
+
     const id = msgId ? msgId : "3EB0" + randHex(8).toUpperCase();
     const msgParams = {
       key: {
@@ -989,6 +991,7 @@ export default class WhatsApp {
       status: 1,
       message: content
     };
+    console.log('sendMessage after msgParams')
     const msgData: WAMessageNode = {
       description: "action",
       attributes: {
@@ -1002,9 +1005,9 @@ export default class WhatsApp {
         }
       ]
     };
-
+    console.log('sendMessage after WAMessageNode')
     await this.sendProto(msgData, id);
-
+    console.log('sendMessage after sendProto')
     return { id, content };
   }
 
@@ -1397,6 +1400,7 @@ export default class WhatsApp {
     fileName: string | undefined = undefined,
     mentionedJid?: WAContextInfo["mentionedJid"],
   ): Promise<{ id: string; content: WAMessage }> {
+    console.log('sendMediaMessage init')
     const nextId = randHex(12).toUpperCase();
     const mediaProto = await this.encryptMedia(
       file,
@@ -1407,6 +1411,7 @@ export default class WhatsApp {
       isGif,
       fileName
     );
+    console.log('sendMediaMessage after mediaProto')
     const media = await this.sendMediaProto(
       (mediaProto[
         (msgType + "Message") as
@@ -1421,6 +1426,8 @@ export default class WhatsApp {
       nextId,
       mentionedJid
     );
+
+    console.log('sendMediaMessage after sendMediaProto')
 
     return { id: nextId, content: media.content };
   }
@@ -1478,7 +1485,9 @@ export default class WhatsApp {
     msgId: string,
     mentionedJid?: WAContextInfo["mentionedJid"]
   ) {
+    console.log('sendMediaProto init')
     if (!mentionedJid) {
+      console.log('sendMediaProto no mentionedJid')
       return await this.sendMessage(
         {
           [msgType + "Message"]: mediaFile
@@ -1487,6 +1496,7 @@ export default class WhatsApp {
         msgId
       );
     } else {
+      console.log('sendMediaProto mentionedJid')
       return await this.sendMessage(
         {
           [msgType + "Message"]: {
