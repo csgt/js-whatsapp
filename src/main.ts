@@ -1400,7 +1400,6 @@ export default class WhatsApp {
     fileName: string | undefined = undefined,
     mentionedJid?: WAContextInfo["mentionedJid"],
   ): Promise<{ id: string; content: WAMessage }> {
-    console.log('sendMediaMessage init')
     const nextId = randHex(12).toUpperCase();
     const mediaProto = await this.encryptMedia(
       file,
@@ -1412,6 +1411,7 @@ export default class WhatsApp {
       fileName
     );
     console.log('sendMediaMessage after mediaProto')
+    console.log(mediaProto)
     const media = await this.sendMediaProto(
       (mediaProto[
         (msgType + "Message") as

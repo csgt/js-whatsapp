@@ -942,12 +942,12 @@ var WhatsApp = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log('sendMediaMessage init');
                         nextId = encryption_1.randHex(12).toUpperCase();
                         return [4 /*yield*/, this.encryptMedia(file, mimetype, msgType, caption, duration, isGif, fileName)];
                     case 1:
                         mediaProto = _a.sent();
                         console.log('sendMediaMessage after mediaProto');
+                        console.log(mediaProto);
                         return [4 /*yield*/, this.sendMediaProto(mediaProto[(msgType + "Message")], msgType, remoteJid, nextId, mentionedJid)];
                     case 2:
                         media = _a.sent();
