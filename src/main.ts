@@ -1335,7 +1335,7 @@ export default class WhatsApp {
       const fileEncSha256 = Sha256(concatIntArray(enc, mac));
       const type = msgType === "sticker" ? "image" : msgType;
       const { hostname, auth } = await this.queryMediaConn();
-      const token = encodeURI(Buffer.from(fileEncSha256).toString("base64"));
+      const token = Buffer.from(fileEncSha256).toString("base64url");
       const path = `mms/${type}`;
 
       const mediaObj: WAMedia = {
