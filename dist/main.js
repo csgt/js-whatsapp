@@ -912,7 +912,7 @@ var WhatsApp = /** @class */ (function () {
                                         mediaObj.gifPlayback = isGif;
                                     }
                                     _e.label = 6;
-                                case 6: return [4 /*yield*/, this.uploadMedia("https://" + hostname + "/" + path + "/" + token + "?auth=" + auth + "&token=" + token, arrays_1.concatIntArray(enc, mac))];
+                                case 6: return [4 /*yield*/, this.uploadMedia("https://" + hostname + "/" + path + "/" + messageTag + "?auth=" + auth + "&token=" + token, arrays_1.concatIntArray(enc, mac))];
                                 case 7:
                                     media = _e.sent();
                                     console.log(media);
