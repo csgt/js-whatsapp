@@ -531,7 +531,6 @@ export default class WhatsApp {
 
     this.apiSocket.onopen = this.init(loginMsgId, this.parameters.restoreSession);
     this.loginMsgId = loginMsgId;
-    console.log('back in constructor')
 
     if (this.parameters.restoreSession) {
       doesFileExist(this.parameters.keysPath!).then(doesExist => {
@@ -540,7 +539,6 @@ export default class WhatsApp {
         }
       });
     } else {
-      console.log('onMessage in constructor')
       this.apiSocket.onmessage = this.onMessage(loginMsgId);
     }
   }
@@ -603,7 +601,6 @@ export default class WhatsApp {
   }
 
   private async getKeys() {
-    console.log("getKeys")
     return new Promise((resolve, reject) => {
       readFile(this.parameters.keysPath!, "utf-8", (err, data) => {
         if (err) reject(err);
@@ -628,7 +625,6 @@ export default class WhatsApp {
   }
 
   private async restoreSession(loginMsgId: string) {
-    console.log("restoreSession", loginMsgId)
     this.apiSocket.send(
       `${loginMsgId},["admin","login","${this.clientToken}","${this.serverToken}","${this.clientId}","takeover"]`
     );
@@ -653,7 +649,6 @@ export default class WhatsApp {
   }
 
   private keepAlive() {
-    console.log("keepalive")
     if (this.apiSocket) {
       this.apiSocket.send("?,,");
       setTimeout(this.keepAlive.bind(this), 20 * 1000);
@@ -661,7 +656,6 @@ export default class WhatsApp {
   }
 
   public disconnect() {
-    console.log("disconnect")
     this.apiSocket.send(`goodbye,,["admin","Conn","disconnect"]`);
   }
 
@@ -978,7 +972,6 @@ export default class WhatsApp {
     remoteJid: string,
     msgId?: string
   ) {
-    console.log('sendMessage init')
 
     const id = msgId ? msgId : "3EB0" + randHex(8).toUpperCase();
     const msgParams = {
@@ -991,7 +984,6 @@ export default class WhatsApp {
       status: 1,
       message: content
     };
-    console.log('sendMessage after msgParams')
     const msgData: WAMessageNode = {
       description: "action",
       attributes: {
@@ -1005,9 +997,7 @@ export default class WhatsApp {
         }
       ]
     };
-    console.log('sendMessage after WAMessageNode')
     await this.sendProto(msgData, id);
-    console.log('sendMessage after sendProto')
     return { id, content };
   }
 
@@ -1412,8 +1402,6 @@ export default class WhatsApp {
       isGif,
       fileName
     );
-    console.log('sendMediaMessage after mediaProto')
-    console.log(mediaProto)
     const media = await this.sendMediaProto(
       (mediaProto[
         (msgType + "Message") as
@@ -1428,8 +1416,6 @@ export default class WhatsApp {
       nextId,
       mentionedJid
     );
-
-    console.log('sendMediaMessage after sendMediaProto')
 
     return { id: nextId, content: media.content };
   }
@@ -1487,9 +1473,7 @@ export default class WhatsApp {
     msgId: string,
     mentionedJid?: WAContextInfo["mentionedJid"]
   ) {
-    console.log('sendMediaProto init')
     if (!mentionedJid) {
-      console.log('sendMediaProto no mentionedJid')
       return await this.sendMessage(
         {
           [msgType + "Message"]: mediaFile
@@ -1498,7 +1482,6 @@ export default class WhatsApp {
         msgId
       );
     } else {
-      console.log('sendMediaProto mentionedJid')
       return await this.sendMessage(
         {
           [msgType + "Message"]: {

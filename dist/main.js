@@ -102,7 +102,6 @@ var WhatsApp = /** @class */ (function () {
         }
         this.apiSocket.onopen = this.init(loginMsgId, this.parameters.restoreSession);
         this.loginMsgId = loginMsgId;
-        console.log('back in constructor');
         if (this.parameters.restoreSession) {
             path_2.doesFileExist(this.parameters.keysPath).then(function (doesExist) {
                 if (!doesExist) {
@@ -111,7 +110,6 @@ var WhatsApp = /** @class */ (function () {
             });
         }
         else {
-            console.log('onMessage in constructor');
             this.apiSocket.onmessage = this.onMessage(loginMsgId);
         }
     }
@@ -152,7 +150,6 @@ var WhatsApp = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                console.log("getKeys");
                 return [2 /*return*/, new Promise(function (resolve, reject) {
                         fs_1.readFile(_this.parameters.keysPath, "utf-8", function (err, data) {
                             if (err)
@@ -173,7 +170,6 @@ var WhatsApp = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
-                console.log("restoreSession", loginMsgId);
                 this.apiSocket.send(loginMsgId + ",[\"admin\",\"login\",\"" + this.clientToken + "\",\"" + this.serverToken + "\",\"" + this.clientId + "\",\"takeover\"]");
                 this.apiSocket.onmessage = function (e) {
                     if (typeof e.data === "string") {
@@ -194,14 +190,12 @@ var WhatsApp = /** @class */ (function () {
         });
     };
     WhatsApp.prototype.keepAlive = function () {
-        console.log("keepalive");
         if (this.apiSocket) {
             this.apiSocket.send("?,,");
             setTimeout(this.keepAlive.bind(this), 20 * 1000);
         }
     };
     WhatsApp.prototype.disconnect = function () {
-        console.log("disconnect");
         this.apiSocket.send("goodbye,,[\"admin\",\"Conn\",\"disconnect\"]");
     };
     WhatsApp.prototype.sendSocketAsync = function (messageTag, data) {
@@ -530,7 +524,6 @@ var WhatsApp = /** @class */ (function () {
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        console.log('sendMessage init');
                         id = msgId ? msgId : "3EB0" + encryption_1.randHex(8).toUpperCase();
                         msgParams = {
                             key: {
@@ -542,7 +535,6 @@ var WhatsApp = /** @class */ (function () {
                             status: 1,
                             message: content
                         };
-                        console.log('sendMessage after msgParams');
                         _a = {
                             description: "action",
                             attributes: {
@@ -560,11 +552,9 @@ var WhatsApp = /** @class */ (function () {
                                 _b)
                         ],
                             _a);
-                        console.log('sendMessage after WAMessageNode');
                         return [4 /*yield*/, this.sendProto(msgData, id)];
                     case 2:
                         _c.sent();
-                        console.log('sendMessage after sendProto');
                         return [2 /*return*/, { id: id, content: content }];
                 }
             });
@@ -801,7 +791,6 @@ var WhatsApp = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         console.log(uploadUrl);
-                        console.log(Buffer.from(body).toString('base64'));
                         return [4 /*yield*/, node_fetch_1.default(uploadUrl, {
                                 body: body,
                                 method: "POST",
@@ -923,11 +912,7 @@ var WhatsApp = /** @class */ (function () {
                                         mediaObj.gifPlayback = isGif;
                                     }
                                     _e.label = 6;
-                                case 6:
-                                    console.log('encryptMedia');
-                                    console.log(enc);
-                                    console.log(mac);
-                                    return [4 /*yield*/, this.uploadMedia("https://" + hostname + "/" + path + "/" + token + "?auth=" + auth + "&token=" + token, arrays_1.concatIntArray(enc, mac))];
+                                case 6: return [4 /*yield*/, this.uploadMedia("https://" + hostname + "/" + path + "/" + token + "?auth=" + auth + "&token=" + token, arrays_1.concatIntArray(enc, mac))];
                                 case 7:
                                     media = _e.sent();
                                     console.log(media);
@@ -954,12 +939,9 @@ var WhatsApp = /** @class */ (function () {
                         return [4 /*yield*/, this.encryptMedia(file, mimetype, msgType, caption, duration, isGif, fileName)];
                     case 1:
                         mediaProto = _a.sent();
-                        console.log('sendMediaMessage after mediaProto');
-                        console.log(mediaProto);
                         return [4 /*yield*/, this.sendMediaProto(mediaProto[(msgType + "Message")], msgType, remoteJid, nextId, mentionedJid)];
                     case 2:
                         media = _a.sent();
-                        console.log('sendMediaMessage after sendMediaProto');
                         return [2 /*return*/, { id: nextId, content: media.content }];
                 }
             });
@@ -1019,20 +1001,16 @@ var WhatsApp = /** @class */ (function () {
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        console.log('sendMediaProto init');
                         if (!!mentionedJid) return [3 /*break*/, 2];
-                        console.log('sendMediaProto no mentionedJid');
                         return [4 /*yield*/, this.sendMessage((_a = {},
                                 _a[msgType + "Message"] = mediaFile,
                                 _a), remoteJid, msgId)];
                     case 1: return [2 /*return*/, _c.sent()];
-                    case 2:
-                        console.log('sendMediaProto mentionedJid');
-                        return [4 /*yield*/, this.sendMessage((_b = {},
-                                _b[msgType + "Message"] = __assign(__assign({}, mediaFile), { contextInfo: {
-                                        mentionedJid: mentionedJid
-                                    } }),
-                                _b), remoteJid, msgId)];
+                    case 2: return [4 /*yield*/, this.sendMessage((_b = {},
+                            _b[msgType + "Message"] = __assign(__assign({}, mediaFile), { contextInfo: {
+                                    mentionedJid: mentionedJid
+                                } }),
+                            _b), remoteJid, msgId)];
                     case 3: return [2 /*return*/, _c.sent()];
                 }
             });
