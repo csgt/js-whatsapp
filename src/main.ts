@@ -1288,6 +1288,8 @@ export default class WhatsApp {
   }
 
   private async uploadMedia(uploadUrl: string, body: Uint8Array) {
+    console.log(uploadUrl)
+    console.log(Buffer.from(body).toString('base64'));
     return await fetch(uploadUrl, {
       body,
       method: "POST",

@@ -799,20 +799,23 @@ var WhatsApp = /** @class */ (function () {
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, node_fetch_1.default(uploadUrl, {
-                            body: body,
-                            method: "POST",
-                            headers: {
-                                Origin: "https://web.whatsapp.com",
-                                Referer: "https://web.whatsapp.com/"
-                            }
-                        })
-                            .then(function (res) { return res.json(); })
-                            .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                return [2 /*return*/, res];
-                            });
-                        }); })];
+                    case 0:
+                        console.log(uploadUrl);
+                        console.log(Buffer.from(body).toString('base64'));
+                        return [4 /*yield*/, node_fetch_1.default(uploadUrl, {
+                                body: body,
+                                method: "POST",
+                                headers: {
+                                    Origin: "https://web.whatsapp.com",
+                                    Referer: "https://web.whatsapp.com/"
+                                }
+                            })
+                                .then(function (res) { return res.json(); })
+                                .then(function (res) { return __awaiter(_this, void 0, void 0, function () {
+                                return __generator(this, function (_a) {
+                                    return [2 /*return*/, res];
+                                });
+                            }); })];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
