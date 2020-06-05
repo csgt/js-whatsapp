@@ -1370,7 +1370,7 @@ export default class WhatsApp {
       }
 
       const media = await this.uploadMedia(
-        `https://${hostname}/${path}/${token}?auth=${auth}&token=${token}`,
+        `https://${hostname}/${path}/${messageTag}?auth=${auth}&token=${token}`,
         concatIntArray(enc, mac)
       );
       console.log(media)
