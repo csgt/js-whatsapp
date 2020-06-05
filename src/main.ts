@@ -1289,7 +1289,6 @@ export default class WhatsApp {
 
   private async uploadMedia(uploadUrl: string, body: Uint8Array) {
     console.log(uploadUrl)
-    console.log(Buffer.from(body).toString('base64'));
     return await fetch(uploadUrl, {
       body,
       method: "POST",
@@ -1379,9 +1378,6 @@ export default class WhatsApp {
       } else if (msgType === "video") {
         mediaObj.gifPlayback = isGif;
       }
-      console.log('encryptMedia')
-      console.log(enc)
-      console.log(mac)
 
       const media = await this.uploadMedia(
         `https://${hostname}/${path}/${token}?auth=${auth}&token=${token}`,
