@@ -868,7 +868,7 @@ var WhatsApp = /** @class */ (function () {
                                     return [4 /*yield*/, this.queryMediaConn()];
                                 case 1:
                                     _a = _e.sent(), hostname = _a.hostname, auth = _a.auth;
-                                    token = Buffer.from(fileEncSha256).toString("base64url");
+                                    token = Buffer.from(fileEncSha256).toString("base64").replace('/', '_');
                                     path = "mms/" + type;
                                     mediaObj = {
                                         mimetype: mimetype,
