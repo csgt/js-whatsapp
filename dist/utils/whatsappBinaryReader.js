@@ -186,6 +186,9 @@ var WABinaryReader = /** @class */ (function () {
         else if (tag === whatsappTokens_1.WATags.NIBBLE_8 || tag === whatsappTokens_1.WATags.HEX_8) {
             return new TextEncoder().encode(this.readPacked8(tag));
         }
+        else if (tag === whatsappTokens_1.WATags.UNKNOWN) {
+            return new TextEncoder().encode(this.readPacked8(tag));
+        }
         else {
             throw new Error("Invalid string with tag " + tag);
         }

@@ -1,6 +1,7 @@
 export declare const WATags: {
     LIST_EMPTY: number;
     STREAM_END: number;
+    UNKNOWN: number;
     DICTIONARY_0: number;
     DICTIONARY_1: number;
     DICTIONARY_2: number;
